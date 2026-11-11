@@ -8,14 +8,13 @@ Aufwand wird in Konflikten, Entscheidungen, Neustarts und gelernten Klauseln gez
 Lauffähig mit: streamlit run app.py
 """
 
-import time
-
 import pandas as pd
 import streamlit as st
 
 import nst_algorithm as A
 import nst_constants as C
 import nst_evaluation as E
+import nst_fortschritt as F
 import nst_instanzen as I
 import nst_scenario as S
 import nst_visualization as V
@@ -43,7 +42,7 @@ def _zeitleiste_hand(strategie, einheit, faktor):
     return zl, ohne, A.ereignis_zeilen(voll.spur)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, max_entries=20)
 def _zeitleiste_seite(familie, n, seed, strategie, einheit, faktor, budget):
     inst = S.aufgabe(familie, n, seed)
     zl = A.zeitleiste(inst, strategie, einheit, faktor=faktor, seed=C.LOESER_SEED_R1, budget=budget)
@@ -51,19 +50,6 @@ def _zeitleiste_seite(familie, n, seed, strategie, einheit, faktor, budget):
     if zl.ergebnis.antwort is True:
         modell_ok = I.pruefe_modell(inst.klauseln, zl.ergebnis.modell)
     return inst, zl, modell_ok
-
-
-@st.cache_data(show_spinner=False)
-def _streuung(familie, n, seed, seeds, budget):
-    """Konflikte je Löser-Zufalls-Seed (0 bis seeds - 1) für keine, Luby (32), geometrisch (100, ×1,5)."""
-    t0 = time.perf_counter()
-    inst = S.aufgabe(familie, n, seed)
-    konf, antworten, abbr = {}, set(), {}
-    konfig = {C.STRATEGIE_KEINE: 1, C.STRATEGIE_LUBY: C.LUBY_EINHEIT_MESSUNG, C.STRATEGIE_GEO: C.GEO_START_MESSUNG}
-    for s, einheit in konfig.items():
-        konf[s], ans, abbr[s] = A.konflikte_je_seed(inst, s, einheit, range(seeds), budget=budget)
-        antworten |= ans
-    return inst, konf, abbr, antworten, time.perf_counter() - t0
 
 
 @st.cache_data(show_spinner=False)
@@ -174,7 +160,8 @@ with tab1:
         ohne = A.messung(ohne_zl.ergebnis)
         modell_ok = None
     else:
-        inst, zl, modell_ok = _zeitleiste_seite(familie, n, int(seed), strategie, einheit, faktor, budget)
+        with st.spinner("Rechne den Einzellauf mit Zeitleiste …"):
+            inst, zl, modell_ok = _zeitleiste_seite(familie, n, int(seed), strategie, einheit, faktor, budget)
         mit = A.messung(zl.ergebnis)
     st.markdown(f"**Aufgabe:** {S.beschreibung(inst)}.")
     if aufgabe == C.AUFGABE_HAND:
@@ -243,8 +230,8 @@ with tab2:
     if familie == C.FAMILIE_ZUFALL and n >= 140:
         st.caption(f"Bei Zufallsformeln dieser Größe können 3 × {seeds} Läufe länger als eine Minute dauern; weniger Seeds oder ein kleineres n wählen, wenn es schneller gehen soll.")
     if st.button("▶ Läufe rechnen", key="streuung_rechnen"):
-        with st.spinner(f"Rechne 3 × {seeds} Läufe, je bis zu {E.zahl(budget)} Konflikte …"):
-            st.session_state["streuung_ergebnis"] = (schluessel, *_streuung(*schluessel))
+        with F.fortschrittsbalken(f"Rechne 3 × {seeds} Läufe, je bis zu {E.zahl(budget)} Konflikte, fertige Läufe") as melde:
+            st.session_state["streuung_ergebnis"] = (schluessel, *F.streuung(*schluessel, melde))
     erg = st.session_state.get("streuung_ergebnis")
     if erg is None or erg[0] != schluessel:
         st.info("Für diese Einstellung ist noch nichts gerechnet. Mit „Läufe rechnen“ starten.")

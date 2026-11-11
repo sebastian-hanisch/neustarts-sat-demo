@@ -28,7 +28,7 @@ Stück der **sat-constraint-programming**-Linie in der „Konzepte“-Reihe für
 | Verdikte, Auswertung der Messreihen | `nst_evaluation.py` | alle Verdikte als reine Funktionen |
 | Messskript der vorgerechneten Reihen | `tools/messung_neustarts.py` | schreibt `nst_messung_vorgerechnet.json` (**vorgerechnet, nicht live**) |
 
-Vier Reiter in der App: **Neustartzeitpunkte** (Einzellauf mit Zeitleiste; Handbeispiel Schritt für Schritt aus der Spur des Lösers), **Streuung gegen Median** (dieselbe Aufgabe, bis zu 30 Löser-Zufalls-Seeds, Kastendiagramm, live auf Knopfdruck mit Spinner), **Familienvergleich** (vorgerechnet), **Einheit und Faktor** (vorgerechnet). Presets (Schnellstart) und allgemeine Einstellungen stehen in der Seitenleiste, die experimentbezogenen Regler im Hauptbereich.
+Vier Reiter in der App: **Neustartzeitpunkte** (Einzellauf mit Zeitleiste; Handbeispiel Schritt für Schritt aus der Spur des Lösers), **Streuung gegen Median** (dieselbe Aufgabe, bis zu 30 Löser-Zufalls-Seeds, Kastendiagramm, live auf Knopfdruck mit Fortschrittsbalken (fertige Läufe); jeder Lauf wird zwischengespeichert, `nst_fortschritt.py`), **Familienvergleich** (vorgerechnet), **Einheit und Faktor** (vorgerechnet). Presets (Schnellstart) und allgemeine Einstellungen stehen in der Seitenleiste, die experimentbezogenen Regler im Hauptbereich.
 
 ## Befunde und Korrekturen gegenüber dem Plan
 
@@ -111,6 +111,7 @@ Zahl-zu-Test: jede Zahl der Tabelle steht in dem genannten Test (exakt für Zäh
 | `nst_constants.py` | Regler-Grenzen, Schwellen der Verdikte, Aufgabenlisten, Farben, Presets |
 | `nst_evaluation.py` | Verdikte (reine Funktionen), Auswertung der vorgerechneten Messreihen |
 | `nst_visualization.py` | Plotly-Abbildungen (Achsen gesperrt) |
+| `nst_fortschritt.py` | Fortschrittsbalken und Zwischenspeicher für den Reiter „Streuung gegen Median“ (je Lauf; keine eigene Rechnung) |
 | `nst_layout.py` | Fester Kopf (Stylesheet) |
 | `nst_presets.py` | Permalink (Begrenzen), Presets (Schnellstart in der Seitenleiste, aktives Preset hervorgehoben), Zufalls-Seed-Knopf |
 | `nst_messung_vorgerechnet.json` | vorgerechnete Messreihen (Messung dieses Repos) |
