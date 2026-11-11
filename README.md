@@ -1,7 +1,6 @@
 # Neustarts – dieselbe Aufgabe, andere Reihenfolge – Streamlit-Demo
 
-<!-- TODO nach dem Deploy: direkt hierher den Live-Link setzen (Leerzeile davor und danach):
-**[→ Demo live ausprobieren](https://sebastianhanisch-neustarts-sat-demo.streamlit.app/)** -->
+**[→ Demo live ausprobieren](https://sebastianhanisch-neustarts-sat-demo.streamlit.app/)**
 
 Stück der **sat-constraint-programming**-Linie in der „Konzepte“-Reihe für die Website „Sebastian Hanisch – Operations Research und Machine Learning“, im SAT-Arm. Vorgänger ist [variablenwahl-sat-demo](https://github.com/sebastian-hanisch/variablenwahl-sat-demo) (Variablenwahl nach Aktivität; Kante „fix“: die frühe Wahl bindet den Löser zu lange an einen schlechten Teil des Suchraums), Nachfolger [klauseln-loeschen-demo](https://github.com/sebastian-hanisch/klauseln-loeschen-demo) (was mit den gelernten Klauseln geschieht; hier bleiben sie alle erhalten). Rückgriff: [sat-phasenuebergang-demo](https://github.com/sebastian-hanisch/sat-phasenuebergang-demo) zählt Knoten der Suche ohne Gedächtnis und ohne Neustarts; hier zählen Konflikte mit Lernen. [graph-coloring-demo](https://github.com/sebastian-hanisch/graph-coloring-demo) hat dasselbe Kernmodell (Färbung) mit anderer Frage. Vehikel sind **Aufträge auf Rampen** (3-Färbung eines Konfliktgraphen) und **Zufalls-3-SAT**; dazu das **Handbeispiel G** (6 Variablen, 11 Klauseln). Der CDCL-Löser ist eine Kopie des Kern-Pakets der Linie (`nst_cdcl.py`, Herkunft und Kern-Version im Modulkopf); die Strategien, die Zeitleiste und alle Messungen sind neuer Code dieses Repos. Die Demo hängt an keiner anderen Demo.
 
